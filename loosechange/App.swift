@@ -2,12 +2,18 @@ import SwiftUI
 
 @main
 struct LooseChangeApp: App {
-    @ObservedObject var state = State()
+    @ObservedObject var state = AppState()
     
     var body: some Scene {
         WindowGroup {
             NavigationView {
-                DashboardView()
+                SidebarView()
+                BudgetView()
+            }
+            .fullScreenCover(
+                isPresented: $state.requiresLogin,
+                onDismiss: {}) {
+                AuthView()
             }
             .environmentObject(state)
         }
