@@ -17,7 +17,18 @@ enum Api {
         let typeName: String
     }
     
+    struct PlaidAccount: Codable {
+        let name: String
+        let balance: String
+        let currency: String
+        let type: String
+    }
+    
     struct Assets: Codable {
         let assets: [Asset]
+    }
+    
+    struct PlaidAccounts: Codable {
+        let plaidAccounts: [PlaidAccount]
     }
 }

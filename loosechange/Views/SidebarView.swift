@@ -29,28 +29,12 @@ struct SidebarView: View {
                 switch fetchStatus {
                 case .notRequested:
                     EmptyView()
-                case .fetching:
-                    DelayedView {
-                        ProgressView()
-                    }
                 case .errored:
                     ApiErrorView()
+                case .fetching:
+                    AccountsView(accounts: state.accounts)
                 case .fetched:
-                    ForEach(state.accounts, id: \.displayName) { account in
-                        VStack(alignment: .leading) {
-                            Text(account.formattedType.uppercased())
-                                .padding(.bottom, 1)
-                                .font(.caption)
-                            Text(account.displayName)
-                                .bold()
-                                .font(.title3)
-                            Text(account.formattedBalance)
-                                .foregroundColor(.accentColor)
-                                .font(.callout)
-                        }
-                        .padding(3)
-                        .listRowSeparator(.hidden)
-                    }
+                    AccountsView(accounts: state.accounts)
                 }
             }
         }
@@ -66,6 +50,29 @@ struct SidebarView: View {
         }
         .refreshable {
             await fetch()
+        }
+    }
+}
+
+
+private struct AccountsView: View {
+    var accounts: [Account]
+    
+    var body: some View {
+        ForEach(accounts, id: \.displayName) { account in
+            VStack(alignment: .leading) {
+                Text(account.formattedType.uppercased())
+                    .padding(.bottom, 1)
+                    .font(.caption)
+                Text(account.displayName)
+                    .bold()
+                    .font(.title3)
+                Text(account.formattedBalance)
+                    .foregroundColor(.accentColor)
+                    .font(.callout)
+            }
+            .padding(3)
+            .listRowSeparator(.hidden)
         }
     }
 }

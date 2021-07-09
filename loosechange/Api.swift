@@ -52,4 +52,11 @@ struct LunchMoneyApi {
             config: config
         )
     }
+    
+    func getPlaidAccounts() async throws -> Data {
+        try await httpGet(
+            url: URL(string: "https://dev.lunchmoney.app/v1/plaid_accounts")!,
+            config: config
+        )
+    }
 }

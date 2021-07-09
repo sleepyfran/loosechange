@@ -36,9 +36,9 @@ class AppState: ObservableObject {
     }
         
     @MainActor func fetchAccounts() async throws {
-        let data = try await lunchMoneyApi.getAccounts()
-        let decodedData = try decoder().decode(Api.Assets.self, from: data)
-        let decodedAccounts = decodedData.assets.map {
+        var data = try await lunchMoneyApi.getAccounts()
+        let accountsData = try decoder().decode(Api.Assets.self, from: data)
+        let decodedAccounts = accountsData.assets.map {
             // When using special symbols in names those come wrapped in HTML
             // entities, so unescape the string to show it normally.
             Account(
@@ -48,6 +48,16 @@ class AppState: ObservableObject {
             )
         }
         
-        accounts = decodedAccounts
+        data = try await lunchMoneyApi.getPlaidAccounts()
+        let plaidData = try decoder().decode(Api.PlaidAccounts.self, from: data)
+        let decodedPlaidAccounts = plaidData.plaidAccounts.map {
+            Account(
+                displayName: $0.name,
+                formattedBalance: format(balance: $0.balance, currency: $0.currency),
+                formattedType: $0.type
+            )
+        }
+        
+        accounts = decodedAccounts + decodedPlaidAccounts
     }
 }
