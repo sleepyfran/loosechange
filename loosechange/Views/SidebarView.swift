@@ -38,7 +38,11 @@ struct SidebarView: View {
                 case .fetched:
                     ForEach(state.accounts, id: \.displayName) { account in
                         VStack(alignment: .leading) {
+                            Text(account.formattedType.uppercased())
+                                .padding(.bottom, 1)
+                                .font(.caption)
                             Text(account.displayName)
+                                .bold()
                                 .font(.title3)
                             Text(account.formattedBalance)
                                 .foregroundColor(.accentColor)

@@ -6,6 +6,7 @@ enum FetchStatus {
 struct Account {
     let displayName: String
     let formattedBalance: String
+    let formattedType: String
 }
 
 enum Api {
@@ -13,6 +14,7 @@ enum Api {
         let displayName: String
         let balance: String
         let currency: String
+        let typeName: String
     }
     
     struct Assets: Codable {

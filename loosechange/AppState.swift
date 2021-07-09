@@ -43,7 +43,8 @@ class AppState: ObservableObject {
             // entities, so unescape the string to show it normally.
             Account(
                 displayName: $0.displayName.htmlUnescape(),
-                formattedBalance: format(balance: $0.balance, currency: $0.currency)
+                formattedBalance: format(balance: $0.balance, currency: $0.currency),
+                formattedType: $0.typeName.capitalized
             )
         }
         
