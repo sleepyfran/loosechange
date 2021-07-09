@@ -22,7 +22,7 @@ struct SidebarView: View {
     var body: some View {
         List {
             NavigationLink(destination: BudgetView()) {
-                Label("Budget", systemImage: "house")
+                Label("Budget", systemImage: "dollarsign.circle")
             }
                         
             Section(header: Text("Accounts & Assets")) {
