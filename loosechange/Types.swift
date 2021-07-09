@@ -18,6 +18,7 @@ enum Api {
     }
     
     struct PlaidAccount: Codable {
+        // TODO: Switch to displayName once the API returns it
         let name: String
         let balance: String
         let currency: String
