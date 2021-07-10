@@ -1,3 +1,4 @@
+import Foundation
 enum FetchStatus {
     case notRequested, fetching, errored, fetched
 }
@@ -8,6 +9,17 @@ struct Account {
     let formattedBalance: String
     let formattedType: String
 }
+
+/// Defines the budget associated with a certain category.
+struct CategoryBudget {
+    let name: String
+    let formattedBudget: String
+    let formattedSpending: String
+}
+
+/// Groups each budget for a category under the name of the group. Categories without a group go under
+/// the special key "".
+typealias Budget = [(String, [CategoryBudget])]
 
 enum Api {
     struct Asset: Codable {
@@ -25,6 +37,23 @@ enum Api {
         let type: String
     }
     
+    struct BudgetData: Codable {
+        let budgetToBase: Decimal
+        let spendingToBase: Decimal
+        let budgetCurrency: String
+    }
+    
+    typealias BudgetDataMonthly = [String: BudgetData]
+    
+    struct CategoryBudget: Codable {
+        let categoryName: String
+        let categoryGroupName: String?
+        let categoryId: Int?
+        let isGroup: Bool?
+        let excludeFromBudget: Bool
+        let data: BudgetDataMonthly
+    }
+    
     struct Assets: Codable {
         let assets: [Asset]
     }
@@ -32,4 +61,6 @@ enum Api {
     struct PlaidAccounts: Codable {
         let plaidAccounts: [PlaidAccount]
     }
+    
+    typealias CategoryBudgets = [CategoryBudget]
 }

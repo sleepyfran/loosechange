@@ -3,20 +3,12 @@ import SwiftUI
 /// Exposes the main sidebar of the app, which includes all common entry points to the app.
 struct SidebarView: View {
     @EnvironmentObject var state: AppState
-    @State var fetchStatus = FetchStatus.notRequested
     
     func fetch() async {
-        if state.requiresLogin {
-            return
-        }
-        
-        fetchStatus = .fetching
-        do {
-            try await state.fetchAccounts()
-            fetchStatus = .fetched
-        } catch {
-            fetchStatus = .errored
-        }
+        await authorizedFetchWithStatus(
+            state: state,
+            fetch: state.fetchAccounts
+        )
     }
     
     var body: some View {
@@ -26,7 +18,7 @@ struct SidebarView: View {
             }
                         
             Section(header: Text("Accounts & Assets")) {
-                switch fetchStatus {
+                switch state.fetchStatus {
                 case .notRequested:
                     EmptyView()
                 case .errored:
@@ -79,7 +71,7 @@ private struct AccountsView: View {
 
 struct Sidebar_Previews: PreviewProvider {
     static var previews: some View {
-        SidebarView(fetchStatus: .errored)
+        SidebarView()
             .environmentObject(AppState())
     }
 }
