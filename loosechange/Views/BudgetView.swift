@@ -53,6 +53,11 @@ private struct BudgetInfoView: View {
                 }
             }
             .listRowSeparator(.hidden)
+            
+            Section {
+                Text("Amounts represent either the money left or the overspending on the category")
+                    .font(.callout)
+            }
         }
     }
 }
