@@ -103,12 +103,10 @@ class AppState: ObservableObject {
         }
         
         // Transform into an array of tuples for easy access in the view.
-        var budget: Budget = []
-        for (category, items) in budgetByCategory {
-            budget.append((category, items))
-        }
-        
-        currentBudget = budget
+        currentBudget = budgetByCategory
+            .reduce([], { acc, cb in acc + [(cb.key, cb.value)] })
+            .map { ($0.0, $0.1.sorted(by: { cb1, cb2 in cb1.name > cb2.name })) }
+            .sorted(by: { group1, group2 in group1.0 > group2.0 })
     }
 }
 
