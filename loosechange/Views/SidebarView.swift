@@ -11,10 +11,14 @@ struct SidebarView: View {
         )
     }
     
+    func openUrl(_ url: String) {
+        UIApplication.shared.open(URL(string: url)!)
+    }
+    
     var body: some View {
         List {
             NavigationLink(destination: BudgetView()) {
-                Label("Budget", systemImage: "dollarsign.circle")
+                Label("Budget", systemImage: "dollarsign.square")
             }
                         
             Section(header: Text("Accounts & Assets")) {
@@ -29,8 +33,22 @@ struct SidebarView: View {
                     AccountsView(accounts: state.accounts)
                 }
             }
+            
+            Section(header: Text("Links")) {
+                Button(action: {
+                    openUrl("https://github.com/sleepyfran/loosechange")
+                }) {
+                    Label("App's source code", systemImage: "curlybraces.square")
+                }
+                
+                Button(action: {
+                    openUrl("https://lunchmoney.app/")
+                }) {
+                    Label("Open LunchMoney", systemImage: "arrow.up.right.square")
+                }
+            }
         }
-        .listStyle(SidebarListStyle())
+        .listStyle(.sidebar)
         .navigationTitle("LooseChange")
         .onReceive(state.$requiresLogin) { _ in
             async {
@@ -60,7 +78,7 @@ private struct AccountsView: View {
                     .bold()
                     .font(.title3)
                 Text(account.formattedBalance)
-                    .foregroundColor(.accentColor)
+                    .foregroundColor(.teal)
                     .font(.callout)
             }
             .padding(.horizontal, 3)
