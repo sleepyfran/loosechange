@@ -5,7 +5,15 @@ func formatCurrency(balance: String, currency: String) -> String {
     let formatter = NumberFormatter()
     formatter.numberStyle = .currencyAccounting
     formatter.currencyCode = currency
-    return formatter.string(from: NSDecimalNumber(string: balance))!
+    let formattedCurrency = formatter.string(from: NSDecimalNumber(string: balance))!
+    
+    // If the balance is negative, replace () with -. Although the formatter
+    // suppors a format for this case it does not take into account the currency
+    // symbol or the position from the locale, so it's easier to just replace it
+    // after formatting.
+    return formattedCurrency
+        .replacingOccurrences(of: "(", with: "-")
+        .replacingOccurrences(of: ")", with: "")
 }
 
 /// Formats a date into the given format.

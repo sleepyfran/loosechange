@@ -69,7 +69,7 @@ class AppState: ObservableObject {
     
     @MainActor func fetchCurrentMonthBudget() async throws {
         let startDate = Calendar.current.firstDayOfMonth()
-        let endDate = Calendar.current.date(byAdding: .day, value: 1, to: startDate)!
+        let endDate = Calendar.current.date(byAdding: .day, value: 1, to: Date.now)!
         
         let data = try await lunchMoneyApi.getBudget(startDate: startDate, endDate: endDate)
         let decodedData = try decoder().decode(Api.CategoryBudgets.self, from: data)
@@ -83,20 +83,26 @@ class AppState: ObservableObject {
             
             let unescapedCategoryName = budget.categoryName.htmlUnescape()
             let unescapedCategoryGroupName = budget.categoryGroupName?.htmlUnescape()
+            
+            // Category is a group, we only want to get the header to organize it.
             if budget.isGroup != nil && budget.isGroup! {
                 if !budgetByCategory.contains(where: { (key, _) in key == unescapedCategoryName }) {
                     budgetByCategory.updateValue([], forKey: unescapedCategoryName)
                 }
+            // Category has a parent, retrieve its data and add it to the group.
             } else if budget.categoryGroupName != nil && !unescapedCategoryGroupName!.isEmpty {
                 var groupBudget = budgetByCategory[unescapedCategoryGroupName!]!
                 groupBudget.append(categoryFromApi(budget: budget))
                 budgetByCategory.updateValue(groupBudget, forKey: unescapedCategoryGroupName!)
+            // Category does not have a parent, retrieve its data and add it to
+            // the empty group.
             } else {
                 var ungroupedBudget = budgetByCategory[""] ?? []
                 ungroupedBudget.append(categoryFromApi(budget: budget))
             }
         }
         
+        // Transform into an array of tuples for easy access in the view.
         var budget: Budget = []
         for (category, items) in budgetByCategory {
             budget.append((category, items))
@@ -108,14 +114,14 @@ class AppState: ObservableObject {
 
 private func categoryFromApi(budget: Api.CategoryBudget) -> CategoryBudget {
     let data = budget.data.first!.value
+    let available = data.budgetToBase - data.spendingToBase
     
     return CategoryBudget(
         name: budget.categoryName.htmlUnescape(),
-        formattedBudget: formatCurrency(
-            balance: "\(data.budgetToBase)",
-            currency: data.budgetCurrency),
-        formattedSpending: formatCurrency(
-            balance: "\(data.spendingToBase)",
-            currency: data.budgetCurrency)
+        formattedAvailable: formatCurrency(
+            balance: "\(available)",
+            currency: data.budgetCurrency
+        ),
+        availableStatus: available >= 0 ? .positive : .negative
     )
 }

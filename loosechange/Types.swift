@@ -11,11 +11,15 @@ struct Account {
     let formattedSubtype: String
 }
 
+enum AvailableStatus {
+    case positive, negative
+}
+
 /// Defines the budget associated with a certain category.
 struct CategoryBudget {
     let name: String
-    let formattedBudget: String
-    let formattedSpending: String
+    let formattedAvailable: String
+    let availableStatus: AvailableStatus
 }
 
 /// Groups each budget for a category under the name of the group. Categories without a group go under

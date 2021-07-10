@@ -61,25 +61,25 @@ private struct BudgetItemInfoView: View {
     let item: CategoryBudget
     
     var body: some View {
-        VStack(alignment: .leading) {
+        HStack(alignment: .center) {
             Text(item.name)
                 .font(.title3)
-                .bold()
-            
-            VStack(alignment: .leading) {
-                Text("**Budgeted**: \(item.formattedBudget)")
-                    .font(.callout)
-                    .foregroundColor(.accentColor)
-                Text("**Spent**: \(item.formattedSpending)")
-                    .font(.callout)
-            }
-            .padding(.top, 1)
+            Spacer()
+            Text(item.formattedAvailable)
+                .foregroundColor(
+                    item.availableStatus == .positive
+                    ? .teal
+                    : .red
+                )
+                .font(.callout)
         }
+        .listRowSeparator(.visible)
     }
 }
 
 struct Dashboard_Previews: PreviewProvider {
     static var previews: some View {
         BudgetView()
+            .environmentObject(AppState())
     }
 }
