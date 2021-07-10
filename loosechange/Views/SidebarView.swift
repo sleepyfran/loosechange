@@ -53,7 +53,7 @@ private struct AccountsView: View {
     var body: some View {
         ForEach(accounts, id: \.displayName) { account in
             VStack(alignment: .leading) {
-                Text(account.formattedType.uppercased())
+                Text("\(account.formattedType.uppercased()) > \(account.formattedSubtype.uppercased())")
                     .padding(.bottom, 1)
                     .font(.caption)
                 Text(account.displayName)
@@ -63,7 +63,7 @@ private struct AccountsView: View {
                     .foregroundColor(.accentColor)
                     .font(.callout)
             }
-            .padding(3)
+            .padding(.horizontal, 3)
             .listRowSeparator(.hidden)
         }
     }

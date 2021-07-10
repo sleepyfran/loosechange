@@ -8,6 +8,7 @@ struct Account {
     let displayName: String
     let formattedBalance: String
     let formattedType: String
+    let formattedSubtype: String
 }
 
 /// Defines the budget associated with a certain category.
@@ -27,6 +28,7 @@ enum Api {
         let balance: String
         let currency: String
         let typeName: String
+        let subtypeName: String
     }
     
     struct PlaidAccount: Codable {
@@ -35,6 +37,7 @@ enum Api {
         let balance: String
         let currency: String
         let type: String
+        let subtype: String
     }
     
     struct BudgetData: Codable {

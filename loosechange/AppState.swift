@@ -48,7 +48,8 @@ class AppState: ObservableObject {
             Account(
                 displayName: $0.displayName.htmlUnescape(),
                 formattedBalance: formatCurrency(balance: $0.balance, currency: $0.currency),
-                formattedType: $0.typeName.capitalized
+                formattedType: $0.typeName.capitalized,
+                formattedSubtype: $0.subtypeName.capitalized
             )
         }
         
@@ -58,7 +59,8 @@ class AppState: ObservableObject {
             Account(
                 displayName: $0.name,
                 formattedBalance: formatCurrency(balance: $0.balance, currency: $0.currency),
-                formattedType: $0.type
+                formattedType: $0.type.capitalized,
+                formattedSubtype: $0.subtype.capitalized
             )
         }
         
