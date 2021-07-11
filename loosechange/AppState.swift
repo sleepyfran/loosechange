@@ -77,10 +77,21 @@ class AppState: ObservableObject {
         
         for budget in decodedData {
             // If there's no data there's no point in trying to display it.
-            if budget.data.isEmpty {
+            let data = budget.data
+            if data.isEmpty {
                 continue
             }
             
+            let values = data.first!.value
+            // Ignore those that contain any nil values since we can't display them.
+            if
+                values.budgetCurrency == nil ||
+                values.spendingToBase == nil ||
+                values.budgetToBase == nil
+            {
+                continue
+            }
+                        
             let unescapedCategoryName = budget.categoryName.htmlUnescape()
             let unescapedCategoryGroupName = budget.categoryGroupName?.htmlUnescape()
             
@@ -112,13 +123,13 @@ class AppState: ObservableObject {
 
 private func categoryFromApi(budget: Api.CategoryBudget) -> CategoryBudget {
     let data = budget.data.first!.value
-    let available = data.budgetToBase - data.spendingToBase
+    let available = data.budgetToBase! - data.spendingToBase!
     
     return CategoryBudget(
         name: budget.categoryName.htmlUnescape(),
         formattedAvailable: formatCurrency(
             balance: "\(available)",
-            currency: data.budgetCurrency
+            currency: data.budgetCurrency!
         ),
         availableStatus: available >= 0 ? .positive : .negative
     )

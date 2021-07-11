@@ -45,9 +45,9 @@ enum Api {
     }
     
     struct BudgetData: Codable {
-        let budgetToBase: Decimal
-        let spendingToBase: Decimal
-        let budgetCurrency: String
+        let budgetToBase: Decimal?
+        let spendingToBase: Decimal?
+        let budgetCurrency: String?
     }
     
     typealias BudgetDataMonthly = [String: BudgetData]

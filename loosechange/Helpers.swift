@@ -14,6 +14,7 @@ func authorizedFetchWithStatus(
         try await fetch()
         state.fetchStatus = .fetched
     } catch {
+        debugPrint(error)
         state.fetchStatus = .errored
     }
 }
