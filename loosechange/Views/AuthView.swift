@@ -3,8 +3,8 @@ import SwiftUI
 struct AuthView: View {
     @EnvironmentObject var state: AppState
     @State var accessToken = ""
-    var loginAvailable: Bool {
-        accessToken.count >= 40
+    var loginDisabled: Bool {
+        accessToken.count < 40
     }
     
     var body: some View {
@@ -22,7 +22,7 @@ struct AuthView: View {
                     Text("Login")
                         .frame(maxWidth: 400)
                 }
-                .disabled(!loginAvailable)
+                .disabled(loginDisabled)
                 .listRowSeparator(.hidden)
                 .buttonStyle(.bordered)
                 .controlSize(.large)
