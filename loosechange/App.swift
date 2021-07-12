@@ -12,7 +12,8 @@ struct LooseChangeApp: App {
             }
             .fullScreenCover(
                 isPresented: $state.requiresLogin,
-                onDismiss: {}) {
+                onDismiss: {}
+            ) {
                 AuthView()
             }
             .environmentObject(state)

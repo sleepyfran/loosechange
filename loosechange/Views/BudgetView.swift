@@ -2,7 +2,7 @@ import SwiftUI
 
 struct BudgetView: View {
     @EnvironmentObject var state: AppState
-    @ObservedObject var budgetRemote = RemoteState<Budget>()
+    @StateObject var budgetRemote = RemoteState<Budget>()
     
     var budgetsService: BudgetsService {
         BudgetsService(token: state.accessToken)
@@ -15,7 +15,7 @@ struct BudgetView: View {
     func fetch() {
         budgetRemote.fetch(
             appState: state,
-            publisher: budgetsService.fetchCurrentMonthBudget()
+            action: budgetsService.fetchCurrentMonthBudget
         )
     }
         

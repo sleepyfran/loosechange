@@ -4,7 +4,7 @@ import Combine
 /// Exposes the main sidebar of the app, which includes all common entry points to the app.
 struct SidebarView: View {
     @EnvironmentObject var state: AppState
-    @ObservedObject var accountsRemote = RemoteState<[Account]>()
+    @StateObject var accountsRemote = RemoteState<[Account]>()
     @State var cancellables: [AnyCancellable] = []
     
     var accountsService: AccountsService {
@@ -14,7 +14,7 @@ struct SidebarView: View {
     func fetchCombine() {
         accountsRemote.fetch(
             appState: state,
-            publisher: accountsService.fetchAccounts()
+            action: accountsService.fetchAccounts
         )
     }
     

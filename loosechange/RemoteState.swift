@@ -7,21 +7,19 @@ class RemoteState<T>: ObservableObject {
 
     func fetch(
         appState: AppState,
-        publisher: AnyPublisher<T, ApiError>
+        action: () -> AnyPublisher<T, ApiError>
     ) {
         if appState.requiresLogin {
             return
         }
         
         remote = .loading
-        cancellable = publisher
+        cancellable = action()
             .receive(on: DispatchQueue.main)
             .map(RemoteContent.done)
             .catch { error in
                 Just(RemoteContent.failed(error))
             }
-            .sink { [weak self] remote in
-                self?.remote = remote
-            }
+            .assign(to: \.remote, on: self)
     }
 }
