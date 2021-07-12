@@ -68,7 +68,7 @@ struct SidebarView: View {
             }
         }
         .listStyle(.sidebar)
-        .navigationTitle("LooseChange")
+        .navigationTitle("Dashboard")
         .onReceive(state.$requiresLogin) { _ in
             fetchCombine()
         }
@@ -93,7 +93,7 @@ private struct AccountsView: View {
                     .bold()
                     .font(.title3)
                 Text(account.formattedBalance)
-                    .foregroundColor(.teal)
+                    .foregroundColor(.accentColor)
                     .font(.callout)
             }
             .padding(.horizontal, 3)

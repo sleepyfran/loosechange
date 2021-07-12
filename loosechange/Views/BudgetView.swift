@@ -49,7 +49,7 @@ private struct BudgetInfoView: View {
     var body: some View {
         List {
             ForEach(budget, id: \.0) { category, content in
-                Text(category)
+                Text(category.isEmpty ? "Ungrouped" : category)
                     .font(.title)
                     .bold()
                 
@@ -78,7 +78,7 @@ private struct BudgetItemInfoView: View {
             Text(item.formattedAvailable)
                 .foregroundColor(
                     item.availableStatus == .positive
-                    ? .teal
+                    ? .accentColor
                     : .red
                 )
                 .font(.callout)

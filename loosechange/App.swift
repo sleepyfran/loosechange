@@ -17,6 +17,7 @@ struct LooseChangeApp: App {
                 AuthView()
             }
             .environmentObject(state)
+            .accentColor(.teal)
         }
     }
 }
