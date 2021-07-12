@@ -1,6 +1,14 @@
 import Foundation
+
 enum FetchStatus {
     case notRequested, fetching, errored, fetched
+}
+
+enum RemoteContent<Value> {
+    case notRequested
+    case loading
+    case failed(Error)
+    case done(Value)
 }
 
 /// Defines an account or asset that the user is holding.
@@ -9,6 +17,23 @@ struct Account {
     let formattedBalance: String
     let formattedType: String
     let formattedSubtype: String
+    
+    static func placeholder(_ i: Int) -> Account {
+        Account(
+            displayName: "Placeholder account \(i)",
+            formattedBalance: "1.000€",
+            formattedType: "cash",
+            formattedSubtype: "checking"
+        )
+    }
+}
+
+struct Accounts {
+    static func placeholder() -> [Account] {
+        (1...10).map { i in
+            Account.placeholder(i)
+        }
+    }
 }
 
 enum AvailableStatus {
@@ -20,11 +45,30 @@ struct CategoryBudget {
     let name: String
     let formattedAvailable: String
     let availableStatus: AvailableStatus
+    
+    static func placeholder(_ i: Int) -> CategoryBudget {
+        CategoryBudget(
+            name: "Placeholder Category Budget \(i)",
+            formattedAvailable: "340€",
+            availableStatus: .positive
+        )
+    }
 }
 
 /// Groups each budget for a category under the name of the group. Categories without a group go under
 /// the special key "".
 typealias Budget = [(String, [CategoryBudget])]
+
+extension Budget {
+    static func placeholder() -> Budget {
+        [
+            ("Placeholder 1", (1...10).map { i in CategoryBudget.placeholder(i) }),
+            ("Placeholder 2", (1...10).map { i in CategoryBudget.placeholder(i) }),
+            ("Placeholder 3", (1...10).map { i in CategoryBudget.placeholder(i) }),
+            ("Placeholder 4", (1...10).map { i in CategoryBudget.placeholder(i) })
+        ]
+    }
+}
 
 enum Api {
     struct Asset: Codable {

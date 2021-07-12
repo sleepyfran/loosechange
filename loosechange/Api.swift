@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 
 struct ApiConfig {
     let accessToken: String
@@ -20,7 +21,7 @@ private func bearer(from config: ApiConfig) -> String {
     "Bearer \(config.accessToken)"
 }
 
-private func httpGet(url: URL, config: ApiConfig) async throws -> Data {
+func httpGet(url: URL, config: ApiConfig) -> AnyPublisher<Data, ApiError> {
     var urlRequest = URLRequest(url: url)
     urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
     urlRequest.setValue(
@@ -29,50 +30,56 @@ private func httpGet(url: URL, config: ApiConfig) async throws -> Data {
     )
 
     debugPrint("GET: \(url.absoluteString))")
-    let (data, response) = try await URLSession.shared.data(for: urlRequest)
     
-    guard let httpResponse = response as? HTTPURLResponse else {
-        debugPrint("Unable to parse response")
-        throw ApiError.unknown
-    }
-    
-    if httpResponse.statusCode == 401 {
-        debugPrint("GET: Server responded with 401")
-        throw ApiError.forbidden
-    } else if httpResponse.statusCode != 200 {
-        debugPrint("GET: Server responded with \(httpResponse.statusCode)")
-        throw ApiError.invalidResponse
-    }
-    
-    debugPrint("GET: Server responded with data \(String(data: data, encoding: .utf8) ?? "")")
-    return data
+    return URLSession.shared.dataTaskPublisher(for: urlRequest)
+        .map(\.data)
+        .mapError { _ in
+            ApiError.unknown
+        }
+        .eraseToAnyPublisher()
 }
 
 struct LunchMoneyApi {
     let config: ApiConfig
+    let decoder: JSONDecoder
     
-    func getAccounts() async throws -> Data {
-        try await httpGet(
+    init(config: ApiConfig) {
+        self.config = config
+        self.decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+    }
+    
+    func getAccounts() -> AnyPublisher<Api.Assets, ApiError> {
+        httpGet(
             url: URL(string: "https://dev.lunchmoney.app/v1/assets")!,
             config: config
         )
+        .decode(type: Api.Assets.self, decoder: decoder)
+        .mapError { _ in ApiError.unknown }
+        .eraseToAnyPublisher()
     }
     
-    func getPlaidAccounts() async throws -> Data {
-        try await httpGet(
+    func getPlaidAccounts() -> AnyPublisher<Api.PlaidAccounts, ApiError> {
+        httpGet(
             url: URL(string: "https://dev.lunchmoney.app/v1/plaid_accounts")!,
             config: config
         )
+        .decode(type: Api.PlaidAccounts.self, decoder: decoder)
+        .mapError { _ in ApiError.unknown }
+        .eraseToAnyPublisher()
     }
     
-    func getBudget(startDate: Date, endDate: Date) async throws -> Data {
+    func getBudget(startDate: Date, endDate: Date) -> AnyPublisher<Api.CategoryBudgets, ApiError> {
         let dateFormat = "YYYY-MM-dd"
         let formattedStart = formatDate(date: startDate, format: dateFormat)
         let formattedEnd = formatDate(date: endDate, format: dateFormat)
         
-        return try await httpGet(
+        return httpGet(
             url: URL(string: "https://dev.lunchmoney.app/v1/budgets?start_date=\(formattedStart)&end_date=\(formattedEnd)")!,
             config: config
         )
+        .decode(type: Api.CategoryBudgets.self, decoder: decoder)
+        .mapError { _ in ApiError.unknown }
+        .eraseToAnyPublisher()
     }
 }

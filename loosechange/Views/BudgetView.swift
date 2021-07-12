@@ -2,38 +2,43 @@ import SwiftUI
 
 struct BudgetView: View {
     @EnvironmentObject var state: AppState
+    @ObservedObject var budgetRemote = RemoteState<Budget>()
+    
+    var budgetsService: BudgetsService {
+        BudgetsService(token: state.accessToken)
+    }
+    
     var currentMonthYear: String {
         formatDate(date: Date.now, format: "MM/YYYY")
     }
     
-    func fetch() async {
-        await authorizedFetchWithStatus(
-            state: state,
-            fetch: state.fetchCurrentMonthBudget
+    func fetch() {
+        budgetRemote.fetch(
+            appState: state,
+            publisher: budgetsService.fetchCurrentMonthBudget()
         )
     }
         
     var body: some View {
         VStack(alignment: .leading) {
-            switch state.fetchStatus {
+            switch budgetRemote.remote {
             case .notRequested:
                 EmptyView()
-            case .fetching:
-                DelayedView {
-                    ProgressView()
-                }
-            case .errored:
+            case .failed:
                 ApiErrorView()
-            case .fetched:
-                BudgetInfoView(budget: state.currentBudget)
+            case .loading:
+                BudgetInfoView(budget: Budget.placeholder())
+                    .redacted(reason: .placeholder)
+            case .done(let budget):
+                BudgetInfoView(budget: budget)
             }
         }
         .navigationTitle("Budget for \(currentMonthYear)")
-        .task {
-            await fetch()
+        .onAppear {
+            fetch()
         }
         .refreshable {
-            await fetch()
+            fetch()
         }
     }
 }

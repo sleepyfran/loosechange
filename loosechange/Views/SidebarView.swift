@@ -1,13 +1,20 @@
 import SwiftUI
+import Combine
 
 /// Exposes the main sidebar of the app, which includes all common entry points to the app.
 struct SidebarView: View {
     @EnvironmentObject var state: AppState
+    @ObservedObject var accountsRemote = RemoteState<[Account]>()
+    @State var cancellables: [AnyCancellable] = []
     
-    func fetch() async {
-        await authorizedFetchWithStatus(
-            state: state,
-            fetch: state.fetchAccounts
+    var accountsService: AccountsService {
+        AccountsService(token: state.accessToken)
+    }
+        
+    func fetchCombine() {
+        accountsRemote.fetch(
+            appState: state,
+            publisher: accountsService.fetchAccounts()
         )
     }
     
@@ -22,15 +29,21 @@ struct SidebarView: View {
             }
                         
             Section(header: Text("Accounts & Assets")) {
-                switch state.fetchStatus {
+                switch accountsRemote.remote {
                 case .notRequested:
                     EmptyView()
-                case .errored:
+                case .failed:
                     ApiErrorView()
-                case .fetching:
-                    AccountsView(accounts: state.accounts)
-                case .fetched:
-                    AccountsView(accounts: state.accounts)
+                case .loading:
+                    AccountsView(
+                        loading: true,
+                        accounts: Accounts.placeholder()
+                    )
+                case .done(let accounts):
+                    AccountsView(
+                        loading: false,
+                        accounts: accounts
+                    )
                 }
             }
             
@@ -38,34 +51,36 @@ struct SidebarView: View {
                 Button(action: {
                     openUrl("https://github.com/sleepyfran/loosechange")
                 }) {
-                    Label("App's source code", systemImage: "curlybraces.square")
+                    Label(
+                        "App's source code",
+                        systemImage: "curlybraces.square"
+                    )
                 }
                 
                 Button(action: {
                     openUrl("https://lunchmoney.app/")
                 }) {
-                    Label("Open LunchMoney", systemImage: "arrow.up.right.square")
+                    Label(
+                        "Open LunchMoney",
+                        systemImage: "arrow.up.right.square"
+                    )
                 }
             }
         }
         .listStyle(.sidebar)
         .navigationTitle("LooseChange")
         .onReceive(state.$requiresLogin) { _ in
-            async {
-                await fetch()
-            }
-        }
-        .task {
-            await fetch()
+            fetchCombine()
         }
         .refreshable {
-            await fetch()
+            fetchCombine()
         }
     }
 }
 
 
 private struct AccountsView: View {
+    var loading = false
     var accounts: [Account]
     
     var body: some View {
@@ -84,6 +99,7 @@ private struct AccountsView: View {
             .padding(.horizontal, 3)
             .listRowSeparator(.hidden)
         }
+        .redacted(reason: loading ? .placeholder : .init())
     }
 }
 
@@ -91,5 +107,12 @@ struct Sidebar_Previews: PreviewProvider {
     static var previews: some View {
         SidebarView()
             .environmentObject(AppState())
+        
+        List {
+            AccountsView(
+                loading: true,
+                accounts: Accounts.placeholder()
+            )
+        }
     }
 }
