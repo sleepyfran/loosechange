@@ -73,7 +73,6 @@ private struct BudgetItemInfoView: View {
     var body: some View {
         HStack(alignment: .center) {
             Text(item.name)
-                .font(.title3)
             Spacer()
             Text(item.formattedAvailable)
                 .foregroundColor(
