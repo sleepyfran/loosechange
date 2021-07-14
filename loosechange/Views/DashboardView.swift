@@ -2,7 +2,7 @@ import SwiftUI
 import Combine
 
 /// Exposes the main sidebar of the app, which includes all common entry points to the app.
-struct SidebarView: View {
+struct DashboardView: View {
     @EnvironmentObject var state: AppState
     @StateObject var accountsRemote = RemoteState<[Account]>()
     @State var cancellables: [AnyCancellable] = []
@@ -105,7 +105,7 @@ private struct AccountsView: View {
 
 struct Sidebar_Previews: PreviewProvider {
     static var previews: some View {
-        SidebarView()
+        DashboardView()
             .environmentObject(AppState())
         
         List {

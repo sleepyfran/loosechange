@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		C92D288C2698804E00F20814 /* HTMLEntities in Frameworks */ = {isa = PBXBuildFile; productRef = C92D288B2698804E00F20814 /* HTMLEntities */; };
-		C92D2891269887F500F20814 /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D2890269887F500F20814 /* SidebarView.swift */; };
+		C92D2891269887F500F20814 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D2890269887F500F20814 /* DashboardView.swift */; };
 		C976B809269BB78B00021BD0 /* RemoteState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C976B808269BB78A00021BD0 /* RemoteState.swift */; };
 		C98C285F269913D400F852F0 /* CalendarExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98C285E269913D400F852F0 /* CalendarExtensions.swift */; };
 		C9BF00FF269BCCFC00B57FDC /* Accounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BF00FE269BCCFC00B57FDC /* Accounts.swift */; };
@@ -26,7 +26,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C92D2890269887F500F20814 /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
+		C92D2890269887F500F20814 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		C976B808269BB78A00021BD0 /* RemoteState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteState.swift; sourceTree = "<group>"; };
 		C98C285E269913D400F852F0 /* CalendarExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarExtensions.swift; sourceTree = "<group>"; };
 		C9BF00FE269BCCFC00B57FDC /* Accounts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Accounts.swift; sourceTree = "<group>"; };
@@ -131,7 +131,7 @@
 				C9E46B8826976AFD00B95C48 /* BudgetView.swift */,
 				C9E46B972697ACCB00B95C48 /* AuthView.swift */,
 				C9E46B9926983E2500B95C48 /* CommonViews.swift */,
-				C92D2890269887F500F20814 /* SidebarView.swift */,
+				C92D2890269887F500F20814 /* DashboardView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -222,7 +222,7 @@
 				C9E46B96269789C000B95C48 /* Formatter.swift in Sources */,
 				C98C285F269913D400F852F0 /* CalendarExtensions.swift in Sources */,
 				C9E46B8D26976BB800B95C48 /* Types.swift in Sources */,
-				C92D2891269887F500F20814 /* SidebarView.swift in Sources */,
+				C92D2891269887F500F20814 /* DashboardView.swift in Sources */,
 				C9E46B9A26983E2500B95C48 /* CommonViews.swift in Sources */,
 				C9E46B982697ACCB00B95C48 /* AuthView.swift in Sources */,
 			);

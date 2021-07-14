@@ -7,7 +7,7 @@ struct LooseChangeApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationView {
-                SidebarView()
+                DashboardView()
                 BudgetView()
             }
             .fullScreenCover(
