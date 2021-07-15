@@ -45,7 +45,8 @@ struct TransactionsService {
                             date: date(from: transaction.date),
                             payee: transaction.payee,
                             formattedAmount: formatCurrency(
-                                balance: transaction.amount,
+                                // Amounts come in negative when positive, so flip.
+                                balance: flipAmount(transaction.amount),
                                 currency: transaction.currency
                             ),
                             notes: transaction.notes ?? "",
@@ -57,6 +58,14 @@ struct TransactionsService {
             .collect()
             .map { $0.sorted(by: { t1, t2 in t1.date > t2.date }) }
             .eraseToAnyPublisher()
+    }
+}
+
+func flipAmount(_ amount: String) -> String {
+    if amount.hasPrefix("-") {
+        return amount.replacingOccurrences(of: "-", with: "")
+    } else {
+        return "-\(amount)"
     }
 }
 
