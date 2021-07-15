@@ -13,6 +13,7 @@ enum RemoteContent<Value> {
 
 /// Defines an account or asset that the user is holding.
 struct Account {
+    let id: Int
     let displayName: String
     let formattedBalance: String
     let formattedType: String
@@ -20,6 +21,7 @@ struct Account {
     
     static func placeholder(_ i: Int) -> Account {
         Account(
+            id: i,
             displayName: "Placeholder account \(i)",
             formattedBalance: "1.000€",
             formattedType: "cash",
@@ -36,7 +38,7 @@ struct Accounts {
     }
 }
 
-enum AvailableStatus {
+enum AmountType {
     case positive, negative
 }
 
@@ -44,7 +46,7 @@ enum AvailableStatus {
 struct CategoryBudget {
     let name: String
     let formattedAvailable: String
-    let availableStatus: AvailableStatus
+    let availableStatus: AmountType
     
     static func placeholder(_ i: Int) -> CategoryBudget {
         CategoryBudget(
@@ -52,6 +54,47 @@ struct CategoryBudget {
             formattedAvailable: "340€",
             availableStatus: .positive
         )
+    }
+}
+
+struct Category {
+    let id: Int
+    let name: String
+    
+    static func placeholder() -> Category {
+        Category(id: 1, name: "Placeholder Category")
+    }
+}
+
+struct Transaction {
+    let id: Int
+    let date: Date
+    let payee: String
+    let formattedAmount: String
+    let notes: String
+    let account: Account
+    let category: Category
+    
+    static func placeholder(_ i: Int) -> Transaction {
+        Transaction(
+            id: i,
+            date: Date.now,
+            payee: "Placeholder payee",
+            formattedAmount: "1.450€",
+            notes: "Just a placeholder note. That's it.",
+            account: Account.placeholder(i),
+            category: Category.placeholder()
+        )
+    }
+}
+
+typealias Transactions = [Transaction]
+
+extension Transactions {
+    static func placeholder() -> Transactions {
+        (1...10).map { i in
+            Transaction.placeholder(i)
+        }
     }
 }
 
@@ -70,8 +113,14 @@ extension Budget {
     }
 }
 
+enum TransactionAccount {
+    case all([Account])
+    case specific(Account)
+}
+
 enum Api {
     struct Asset: Codable {
+        let id: Int
         let displayName: String
         let balance: String
         let currency: String
@@ -80,6 +129,7 @@ enum Api {
     }
     
     struct PlaidAccount: Codable {
+        let id: Int
         // TODO: Switch to displayName once the API returns it
         let name: String
         let balance: String
@@ -105,6 +155,23 @@ enum Api {
         let data: BudgetDataMonthly
     }
     
+    struct Transaction: Codable {
+        let id: Int
+        let date: String
+        let payee: String
+        let amount: String
+        let currency: String
+        let assetId: Int?
+        let plaidAccountId: Int?
+        let categoryId: Int
+        let notes: String?
+    }
+    
+    struct Category: Codable {
+        let id: Int
+        let name: String
+    }
+    
     struct Assets: Codable {
         let assets: [Asset]
     }
@@ -114,4 +181,12 @@ enum Api {
     }
     
     typealias CategoryBudgets = [CategoryBudget]
+    
+    struct Transactions: Codable {
+        let transactions: [Transaction]
+    }
+    
+    struct Categories: Codable {
+        let categories: [Category]
+    }
 }

@@ -17,8 +17,21 @@ func formatCurrency(balance: String, currency: String) -> String {
 }
 
 /// Formats a date into the given format.
-func formatDate(date: Date, format: String) -> String {
+func formatDate(
+    date: Date,
+    format: String = "YYYY-MM-dd"
+) -> String {
     let formatter = DateFormatter()
     formatter.dateFormat = format
     return formatter.string(from: date)
+}
+
+/// Creates a date from the given string.
+func date(
+    from date: String,
+    format: String = "YYYY-MM-dd"
+) -> Date {
+    let formatter = DateFormatter()
+    formatter.dateFormat = format
+    return formatter.date(from: date)!
 }

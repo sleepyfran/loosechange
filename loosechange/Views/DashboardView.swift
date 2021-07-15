@@ -5,13 +5,21 @@ import Combine
 struct DashboardView: View {
     @EnvironmentObject var state: AppState
     @StateObject var accountsRemote = RemoteState<[Account]>()
-    @State var cancellables: [AnyCancellable] = []
+    
+    var accounts: [Account] {
+        switch accountsRemote.remote {
+        case .done(let accs):
+            return accs
+        default:
+            return []
+        }
+    }
     
     var accountsService: AccountsService {
         AccountsService(token: state.accessToken)
     }
         
-    func fetchCombine() {
+    func fetch() {
         accountsRemote.fetch(
             appState: state,
             action: accountsService.fetchAccounts
@@ -25,7 +33,15 @@ struct DashboardView: View {
     var body: some View {
         List {
             NavigationLink(destination: BudgetView()) {
-                Label("Budget", systemImage: "dollarsign.square")
+                Label("Budget", systemImage: "banknote")
+            }
+            
+            NavigationLink(
+                destination: TransactionsView(
+                    transactionAccount: .all(accounts)
+                ))
+            {
+                Label("All transactions", systemImage: "bag")
             }
                         
             Section(header: Text("Accounts & Assets")) {
@@ -53,7 +69,7 @@ struct DashboardView: View {
                 }) {
                     Label(
                         "App's source code",
-                        systemImage: "curlybraces.square"
+                        systemImage: "curlybraces"
                     )
                 }
                 
@@ -62,7 +78,7 @@ struct DashboardView: View {
                 }) {
                     Label(
                         "Open LunchMoney",
-                        systemImage: "arrow.up.right.square"
+                        systemImage: "arrow.up.right"
                     )
                 }
             }
@@ -70,10 +86,10 @@ struct DashboardView: View {
         .listStyle(.sidebar)
         .navigationTitle("Dashboard")
         .onReceive(state.$requiresLogin) { _ in
-            fetchCombine()
+            fetch()
         }
         .refreshable {
-            fetchCombine()
+            fetch()
         }
     }
 }
@@ -85,19 +101,25 @@ private struct AccountsView: View {
     
     var body: some View {
         ForEach(accounts, id: \.displayName) { account in
-            VStack(alignment: .leading) {
-                Text("\(account.formattedType.uppercased()) > \(account.formattedSubtype.uppercased())")
-                    .padding(.bottom, 1)
-                    .font(.caption)
-                Text(account.displayName)
-                    .bold()
-                    .font(.title3)
-                Text(account.formattedBalance)
-                    .foregroundColor(.accentColor)
-                    .font(.callout)
+            NavigationLink(
+                destination: TransactionsView(
+                    transactionAccount: .specific(account)
+                ))
+            {
+                VStack(alignment: .leading) {
+                    Text("\(account.formattedType.uppercased()) > \(account.formattedSubtype.uppercased())")
+                        .padding(.bottom, 1)
+                        .font(.caption)
+                    Text(account.displayName)
+                        .bold()
+                        .font(.title3)
+                    Text(account.formattedBalance)
+                        .foregroundColor(.accentColor)
+                        .font(.callout)
+                }
+                .padding(.horizontal, 3)
+                .listRowSeparator(.hidden)
             }
-            .padding(.horizontal, 3)
-            .listRowSeparator(.hidden)
         }
         .redacted(reason: loading ? .placeholder : .init())
     }

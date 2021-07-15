@@ -70,9 +70,8 @@ struct LunchMoneyApi {
     }
     
     func getBudget(startDate: Date, endDate: Date) -> AnyPublisher<Api.CategoryBudgets, ApiError> {
-        let dateFormat = "YYYY-MM-dd"
-        let formattedStart = formatDate(date: startDate, format: dateFormat)
-        let formattedEnd = formatDate(date: endDate, format: dateFormat)
+        let formattedStart = formatDate(date: startDate)
+        let formattedEnd = formatDate(date: endDate)
         
         return httpGet(
             url: URL(string: "https://dev.lunchmoney.app/v1/budgets?start_date=\(formattedStart)&end_date=\(formattedEnd)")!,
@@ -80,6 +79,32 @@ struct LunchMoneyApi {
         )
         .decode(type: Api.CategoryBudgets.self, decoder: decoder)
         .mapError { _ in ApiError.unknown }
+        .eraseToAnyPublisher()
+    }
+    
+    func getTransactions() -> AnyPublisher<Api.Transactions, ApiError> {
+        httpGet(
+            url: URL(string: "https://dev.lunchmoney.app/v1/transactions")!,
+            config: config
+        )
+        .decode(type: Api.Transactions.self, decoder: decoder)
+        .mapError { error in
+            debugPrint(error)
+            return ApiError.unknown
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    func getCategories() -> AnyPublisher<Api.Categories, ApiError> {
+        httpGet(
+            url: URL(string: "https://dev.lunchmoney.app/v1/categories")!,
+            config: config
+        )
+        .decode(type: Api.Categories.self, decoder: decoder)
+        .mapError { error in
+            debugPrint(error)
+            return ApiError.unknown
+        }
         .eraseToAnyPublisher()
     }
 }

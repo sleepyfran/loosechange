@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		C92D288C2698804E00F20814 /* HTMLEntities in Frameworks */ = {isa = PBXBuildFile; productRef = C92D288B2698804E00F20814 /* HTMLEntities */; };
 		C92D2891269887F500F20814 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92D2890269887F500F20814 /* DashboardView.swift */; };
+		C937FF10269F31B300CDFA20 /* TransactionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C937FF0F269F31B300CDFA20 /* TransactionsView.swift */; };
+		C937FF12269F3DE900CDFA20 /* Transactions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C937FF11269F3DE900CDFA20 /* Transactions.swift */; };
 		C976B809269BB78B00021BD0 /* RemoteState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C976B808269BB78A00021BD0 /* RemoteState.swift */; };
 		C98C285F269913D400F852F0 /* CalendarExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98C285E269913D400F852F0 /* CalendarExtensions.swift */; };
 		C9BF00FF269BCCFC00B57FDC /* Accounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BF00FE269BCCFC00B57FDC /* Accounts.swift */; };
@@ -27,6 +29,8 @@
 
 /* Begin PBXFileReference section */
 		C92D2890269887F500F20814 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		C937FF0F269F31B300CDFA20 /* TransactionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsView.swift; sourceTree = "<group>"; };
+		C937FF11269F3DE900CDFA20 /* Transactions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transactions.swift; sourceTree = "<group>"; };
 		C976B808269BB78A00021BD0 /* RemoteState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteState.swift; sourceTree = "<group>"; };
 		C98C285E269913D400F852F0 /* CalendarExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarExtensions.swift; sourceTree = "<group>"; };
 		C9BF00FE269BCCFC00B57FDC /* Accounts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Accounts.swift; sourceTree = "<group>"; };
@@ -77,6 +81,7 @@
 			children = (
 				C9BF00FE269BCCFC00B57FDC /* Accounts.swift */,
 				C9BF0100269BCEB400B57FDC /* Budgets.swift */,
+				C937FF11269F3DE900CDFA20 /* Transactions.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -132,6 +137,7 @@
 				C9E46B972697ACCB00B95C48 /* AuthView.swift */,
 				C9E46B9926983E2500B95C48 /* CommonViews.swift */,
 				C92D2890269887F500F20814 /* DashboardView.swift */,
+				C937FF0F269F31B300CDFA20 /* TransactionsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -212,6 +218,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C937FF12269F3DE900CDFA20 /* Transactions.swift in Sources */,
 				C9E46B8926976AFD00B95C48 /* BudgetView.swift in Sources */,
 				C9E46B7B26976A7300B95C48 /* App.swift in Sources */,
 				C976B809269BB78B00021BD0 /* RemoteState.swift in Sources */,
@@ -225,6 +232,7 @@
 				C92D2891269887F500F20814 /* DashboardView.swift in Sources */,
 				C9E46B9A26983E2500B95C48 /* CommonViews.swift in Sources */,
 				C9E46B982697ACCB00B95C48 /* AuthView.swift in Sources */,
+				C937FF10269F31B300CDFA20 /* TransactionsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

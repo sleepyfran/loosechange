@@ -17,6 +17,7 @@ struct AccountsService {
                     // When using special symbols in names those come wrapped in HTML
                     // entities, so unescape the string to show it normally.
                     Account(
+                        id: $0.id,
                         displayName: $0.displayName.htmlUnescape(),
                         formattedBalance: formatCurrency(balance: $0.balance, currency: $0.currency),
                         formattedType: $0.typeName.capitalized,
@@ -31,6 +32,7 @@ struct AccountsService {
             .map { plaidAccounts in
                 plaidAccounts.map {
                     Account(
+                        id: $0.id,
                         displayName: $0.name,
                         formattedBalance: formatCurrency(balance: $0.balance, currency: $0.currency),
                         formattedType: $0.type.capitalized,
