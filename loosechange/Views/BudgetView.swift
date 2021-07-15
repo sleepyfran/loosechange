@@ -49,12 +49,14 @@ private struct BudgetInfoView: View {
     var body: some View {
         List {
             ForEach(budget, id: \.0) { category, content in
-                Text(category.isEmpty ? "Ungrouped" : category)
-                    .font(.title)
-                    .bold()
-                
-                ForEach(content, id: \.name) { categoryBudget in
-                    BudgetItemInfoView(item: categoryBudget)
+                Section {
+                    Text(category.isEmpty ? "Ungrouped" : category)
+                        .font(.title)
+                        .bold()
+                    
+                    ForEach(content, id: \.name) { categoryBudget in
+                        BudgetItemInfoView(item: categoryBudget)
+                    }
                 }
             }
             .listRowSeparator(.hidden)
