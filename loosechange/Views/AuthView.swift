@@ -24,9 +24,8 @@ struct AuthView: View {
                 }
                 .disabled(loginDisabled)
                 .listRowSeparator(.hidden)
-                .buttonStyle(.bordered)
+                .buttonStyle(.borderedProminent)
                 .controlSize(.large)
-                .controlProminence(.increased)
                 
                 Text("You can get an access token from **LaunchMoney > Settings > Developers > Request new access token**")
                     .padding()

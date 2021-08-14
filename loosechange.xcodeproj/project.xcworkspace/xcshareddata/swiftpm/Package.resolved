@@ -2,7 +2,7 @@
   "object": {
     "pins": [
       {
-        "package": "swift-html-entities",
+        "package": "HTMLEntities",
         "repositoryURL": "https://github.com/Kitura/swift-html-entities",
         "state": {
           "branch": "master",
